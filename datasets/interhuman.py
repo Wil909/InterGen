@@ -28,25 +28,26 @@ class InterHumanDataset(data.Dataset):
 
         self.cache = opt.CACHE
 
+        split_dir = './data/split'
         ignore_list = []
         try:
-            ignore_list = open(os.path.join(opt.DATA_ROOT, "ignore_list.txt"), "r").readlines()
+            ignore_list = open(os.path.join(split_dir, "ignore_list.txt"), "r").readlines()
         except Exception as e:
             print(e)
         data_list = []
         if self.opt.MODE == "train":
             try:
-                data_list = open(os.path.join(opt.DATA_ROOT, "train.txt"), "r").readlines()
+                data_list = open(os.path.join(split_dir, "train.txt"), "r").readlines()
             except Exception as e:
                 print(e)
         elif self.opt.MODE == "val":
             try:
-                data_list = open(os.path.join(opt.DATA_ROOT, "val.txt"), "r").readlines()
+                data_list = open(os.path.join(split_dir, "val.txt"), "r").readlines()
             except Exception as e:
                 print(e)
         elif self.opt.MODE == "test":
             try:
-                data_list = open(os.path.join(opt.DATA_ROOT, "test.txt"), "r").readlines()
+                data_list = open(os.path.join(split_dir, "test.txt"), "r").readlines()
             except Exception as e:
                 print(e)
 
@@ -65,10 +66,12 @@ class InterHumanDataset(data.Dataset):
                         continue
                     file_path_person1 = pjoin(root, file)
                     file_path_person2 = pjoin(root.replace("person1", "person2"), file)
-                    text_path = file_path_person1.replace("motions_processed", "annots").replace("person1", "").replace("npy", "txt")
+                    text_path = file_path_person1.replace("motions_processed", "annots").replace("person1/", "").replace("npy", "txt")
 
-
-                    texts = [item.replace("\n", "") for item in open(text_path, "r").readlines()]
+                    try:
+                        texts = [item.replace("\n", "") for item in open(text_path, "r").readlines()]
+                    except:
+                        print('no text: ', text_path)
                     texts_swap = [item.replace("\n", "").replace("left", "tmp").replace("right", "left").replace("tmp", "right")
                                   .replace("clockwise", "tmp").replace("counterclockwise","clockwise").replace("tmp","counterclockwise") for item in texts]
 

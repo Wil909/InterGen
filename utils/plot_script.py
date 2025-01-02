@@ -101,6 +101,7 @@ def plot_3d_motion(save_path, kinematic_tree, mp_joints, title, figsize=(10, 10)
 
     def update(index):
         #         print(index)
+        # ax.cla()
         ax.lines = []
         ax.collections = []
         ax.view_init(elev=120, azim=-90)
@@ -125,6 +126,5 @@ def plot_3d_motion(save_path, kinematic_tree, mp_joints, title, figsize=(10, 10)
 
     ani = FuncAnimation(fig, update, frames=frame_number, interval=1000 / fps, repeat=False)
 
-    # writer = FFMpegFileWriter(fps=fps)
-    ani.save(save_path, fps=fps)
+    ani.save(save_path, writer="ffmpeg", fps=fps)
     plt.close()
